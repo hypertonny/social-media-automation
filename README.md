@@ -51,7 +51,6 @@ Replace `date_to_post_cell` with the actual cell reference.
 **Filter**:  
 - `post_action = Publish`
 - `ready_to_post = YES`
-- `post_status = Publish`
 
 **Path A (LinkedIn)**:
 - Condition: `platforms` contains "LinkedIn"
@@ -103,12 +102,8 @@ Replace `date_to_post_cell` with the actual cell reference.
 Whenever a new row in your Google Sheet has:
 - `ready_to_post = YES`
 - `post_action = Publish`
-- `post_status = Publish`
 
 Zapier will automatically post the text on your LinkedIn profile! 🎯
-
-After successful posting:
-- `post_status` will update to **Posted** automatically.
 
 ---
 
