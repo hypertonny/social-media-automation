@@ -17,12 +17,14 @@ This project automates posting text content directly from a Google Sheet to Link
 ## 🛠️ Setup Instructions
 
 ### 1. LinkedIn Developer Setup
-- Create a LinkedIn Developer App.
+- Create a [LinkedIn Developer App](https://www.linkedin.com/developers/).
 - Add products:
   - **Sign In with LinkedIn (OpenID Connect)** → to fetch Member ID
   - **Share on LinkedIn** → to post content
 - Generate an **Access Token** with `w_member_social` permission.
-- Fetch your **Member ID** using `/v2/userinfo` endpoint.
+- Fetch your **Member ID** using the `/v2/userinfo` endpoint.
+
+---
 
 ### 2. Google Sheet Setup
 Create a sheet with the following columns:
@@ -31,45 +33,42 @@ Create a sheet with the following columns:
 |:---|:---|:---|:---|:---|:---|:---|
 | Your post text | (Optional) | 2025-04-28 | LinkedIn | Publish | Pending | YES |
 
-- `ready_to_post` is calculated using a formula:
-  ```excel
-  =IF(date_to_post_cell = TODAY(), "YES", "NO")
+Use this formula to auto-calculate `ready_to_post`:
 
+```excel
+=IF(date_to_post_cell = TODAY(), "YES", "NO")
+```
 
-3. Zapier Zap Setup
+Replace `date_to_post_cell` with the actual cell reference.
 
-    Trigger: New or Updated Spreadsheet Row (Google Sheets)
+---
 
-    Filter:
+### 3. Zapier Zap Setup
 
-        post_action = Publish
+**Trigger**:  
+- New or Updated Spreadsheet Row (Google Sheets)
 
-        ready_to_post = YES
+**Filter**:  
+- `post_action = Publish`
+- `ready_to_post = YES`
+- `post_status = Publish`
 
-        post_status = Publish
+**Path A (LinkedIn)**:
+- Condition: `platforms` contains "LinkedIn"
+- Action: Webhook by Zapier (POST Request)
 
-    Path A (LinkedIn):
+---
 
-        Condition: platforms contains "LinkedIn"
+### 🛜 Webhook POST Configuration
 
-        Action: Webhook by Zapier (POST Request)
+- **Method**: POST
+- **URL**: `https://api.linkedin.com/v2/ugcPosts`
+- **Data Pass-Through**: False
+- **Payload Type**: JSON
+- **Unflatten**: No
 
-🛜 Webhook POST Configuration
-
-    Method: POST
-
-    URL:
-
-https://api.linkedin.com/v2/ugcPosts
-
-Data Pass-Through: False
-
-Payload Type: JSON
-
-Unflatten: No
-
-Body (Data):
-
+**Body (Data)**:
+```json
 {
   "author": "urn:li:person:YOUR_MEMBER_ID",
   "lifecycleState": "PUBLISHED",
@@ -85,72 +84,51 @@ Body (Data):
     "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
   }
 }
+```
 
-Headers:
-Key	Value
-Authorization	Bearer YOUR_ACCESS_TOKEN
-X-Restli-Protocol-Version	2.0.0
-Content-Type	application/json
+**Headers**:
+| Key | Value |
+|:---|:---|
+| Authorization | Bearer YOUR_ACCESS_TOKEN |
+| X-Restli-Protocol-Version | 2.0.0 |
+| Content-Type | application/json |
 
-✅ Important:
-Make sure "Bearer" is included before the Access Token in the Authorization header.
-✅ Final Result
+✅ **Important**:  
+- Ensure "Bearer" is included before the Access Token in the `Authorization` header.
+
+---
+
+## ✅ Final Result
 
 Whenever a new row in your Google Sheet has:
+- `ready_to_post = YES`
+- `post_action = Publish`
+- `post_status = Publish`
 
-    ready_to_post = YES
-
-    post_action = Publish
-
-    post_status = Publish
-
-Zapier will automatically post the text on your LinkedIn profile!
+Zapier will automatically post the text on your LinkedIn profile! 🎯
 
 After successful posting:
+- `post_status` will update to **Posted** automatically.
 
-    post_status is updated to Posted automatically.
+---
 
-📌 Notes
+## 📌 Notes
 
-    Access Tokens expire periodically. Refresh when needed.
+- 🔄 Access Tokens expire periodically. Refresh them when needed.
+- 📸 Direct Instagram posting requires a **Business Instagram Account** connected to a **Facebook Page**.
 
-    Direct Instagram posting requires Instagram Business Account + Facebook Page.
+---
 
-    Future Scope:
+## 🌟 Future Scope
 
-        Posting images/media.
+- 📷 Posting images and other media.
+- 🤖 Smart scheduling using AI predictions.
+- 🛠️ Advanced error handling and retries.
 
-        Smart Scheduling using AI.
+---
 
-        Error handling and retries.
+## 🔥 License
 
-🔥 License
+This project is free to **use**, **clone**, and **modify** for personal or professional automation purposes.
 
-This project is free to use, clone, and modify for personal or professional automation purposes.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
+---
