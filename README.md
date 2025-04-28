@@ -105,6 +105,11 @@ Whenever a new row in your Google Sheet has:
 
 Zapier will automatically post the text on your LinkedIn profile! 🎯
 
+![image_2025-04-28_11-03-20](https://github.com/user-attachments/assets/4a756627-d552-4dfd-a568-2b8e04afe65e)
+
+
+![google sheet](https://github.com/user-attachments/assets/3aa91c9b-4f24-4dbc-b222-4f09cad67327)
+
 ---
 
 ## 📌 Notes
